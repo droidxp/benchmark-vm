@@ -1,18 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR=~/script
 
-function base(){
-#	echo "******************** Configuring environment ********************"
-#	export TZ=America/Sao_Paulo
-#	export ANDROID_SDK_ROOT=/opt/android-sdk
-#	export ANDROID_HOME=/opt/android-sdk
-#	export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-	#export _JAVA_OPTIONS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
-#	export PATH=$ANDROID_SDK_ROOT/tools/:$ANDROID_SDK_ROOT/platform-tools:$PATH
-	# patch emulator issue: Running as root without --no-sandbox is not supported. See https://crbug.com/638180.
-	# https://doc.qt.io/qt-5/qtwebengine-platform-notes.html#sandboxing-support
-#	export QTWEBENGINE_DISABLE_SANDBOX=1
-		
+function base(){		
 	echo "******************** Installing base libraries ********************"
 	sudo apt-get update 
 	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip qt5-default nano python2.7 python-pip-whl python-setuptools python-protobuf curl tree nano vim aapt apktool expect tcl-expect zipalign gnuplot
@@ -34,7 +24,7 @@ function android() {
 	ANDROID_HOME=/opt/android-sdk
 	JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 	
-	export PATH=${PATH}:$JAVA_HOME/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin
+	export PATH=$JAVA_HOME/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}
 	
 	sudo rm -Rf /opt/*
 	sudo chown -R $USER:$USER /opt 
@@ -52,16 +42,14 @@ function android() {
 	
 	echo "no" | avdmanager --verbose create avd --force --name "${EMULATOR_NAME}" --device "pixel" --package "${ANDROID_EMULATOR_PACKAGE}"
 	
-	cd ~/script
+	cd $SCRIPT_DIR
 	chmod +x license_accepter.sh 
 	./license_accepter.sh $ANDROID_SDK_ROOT 
-	rm license_accepter.sh
 }
 
 ############# BENCHMARK ############
 function pip(){
 	echo "******************** Installing PIP ********************"	
-	# pip and python libraries
 	cd /opt && curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py	
 	python2 get-pip.py 
 	pip2 install pandas numpy matplotlib Jinja2 uiautomator	
@@ -75,7 +63,9 @@ function benchmark(){
 	git clone https://github.com/droidxp/benchmark.git
 	rm -Rf ./benchmark/data/instrumented	
 		
-	#TODO alterar o emulador (-no-window) antes de executar
+	#...........................................................
+	#TODO >>>> alterar o emulador (-no-window) antes de executar
+	#...........................................................
 }
 
 
@@ -97,7 +87,7 @@ function stoat(){
 	gem install nokogiri 
 	git clone https://github.com/rbonifacio/Stoat.git
 	echo 'export STOAT_HOME=/opt/Stoat/Stoat' >> ~/.bashrc
-	echo 'export export PATH=$PATH:$STOAT_HOME/bin' >> ~/.bashrc
+	echo 'export PATH=$PATH:$STOAT_HOME/bin' >> ~/.bashrc
 }
 
 # sapienz
@@ -116,7 +106,7 @@ function humanoid(){
 	echo "******************** Installing Humanoid and docker ********************"
 	sudo apt-get remove -y docker docker-engine docker.io containerd runc
 	sudo apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	sudo apt-get update
 	sudo apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io
@@ -131,16 +121,8 @@ function humanoid(){
 	docker pull phtcosta/humanoid:1.0
 }
 
-# clean up
-function clean(){
-	echo "******************** Clean up!!! ********************"
-	sudo apt-get clean
-	sudo apt-get autoremove -y 
-	sudo rm -rf /var/lib/apt/lists/* /var/tmp/*	
-}
-
-function env(){
-	echo "******************** Configuring environment ********************"
+function environment(){
+	echo "******************** Configuring environment ********************"	
 	
 	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
 	
@@ -149,34 +131,47 @@ function env(){
 	ln -s /opt/android-sdk/ Sdk
 	
 	echo 'export ANDROID_SDK_ROOT=/opt/android-sdk' >> ~/.bashrc
-	echo 'export ANDROID_HOME=/opt/android-sdk' >> ~/.bashrc
+	echo 'export ANDROID_SDK_HOME=/opt/android-sdk' >> ~/.bashrc
+	echo 'export ANDROID_HOME=/opt/android-sdk' >> ~/.bashrc	
 	echo 'export BENCHMARK_HOME=/opt/benchmark' >> ~/.bashrc
 	echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> ~/.bashrc
-	echo 'export PATH=$JAVA_HOME/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}' >> ~/.bashrc
+	echo 'export PATH=${JAVA_HOME}/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}' >> ~/.bashrc
 	# patch emulator issue: Running as root without --no-sandbox is not supported. See https://crbug.com/638180.
 	# https://doc.qt.io/qt-5/qtwebengine-platform-notes.html#sandboxing-support
 	echo 'export QTWEBENGINE_DISABLE_SANDBOX=1' >> ~/.bashrc	
 		
 	source ~/.bashrc
 	
+	#sudo addgroup droidxp
+	#sudo chgrp -R droidxp /opt	
+	#sudo usermod -a -G droidxp $USER
+	#sudo chmod -R a+rw /opt
+	
 	cd /opt/benchmark	
 }
 
+# clean up
+function clean(){
+	echo "******************** Clean up!!! ********************"
+	sudo apt-get clean
+	sudo apt-get autoremove -y 
+	sudo rm -rf /var/lib/apt/lists/* /var/tmp/*	
+}
 
 
+#*************************************************
 #******************** INSTALL ********************
-#create_user
 base 
 android
 pip
 benchmark 
-# TODO: descomentar ferramentas qdo for instalar de verdade
 droidbot 
-#stoat 
-#sapienz 
-#humanoid 
+stoat 
+sapienz 
+humanoid 
+environment
 clean
-env
+#*************************************************
 
 
 echo "SUCCESS!!!"
