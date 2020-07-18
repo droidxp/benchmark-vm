@@ -6,7 +6,7 @@ function base(){
 	echo "******************** Installing base libraries ********************"
 	sudo apt-get update 
 	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python3 python3-setuptools python3-pip curl tree nano vim aapt apktool expect zipalign gnuplot qemu-kvm libvirt-daemon-system bridge-utils virt-manager
-#qt5-default tcl-expect
+#qt5-default 
 	sudo apt-get upgrade --yes
 	sudo apt-get dist-upgrade --yes		
 }
@@ -17,7 +17,9 @@ function android() {
 	ANDROID_SDK_VERSION=6609375
 	ANDROID_EMULATOR_PACKAGE="system-images;android-19;google_apis;x86"
 	ANDROID_PLATFORM_VERSION="platforms;android-19"
-	ANDROID_SDK_PACKAGES="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platform-tools emulator"
+	ANDROID_SDK_PACKAGES="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platform-tools emulator" 
+	# extras;intel;Hardware_Accelerated_Execution_Manager"
+	# Available Packages: https://gist.github.com/alvr/8db356880447d2c4bbe948ea92d22c23	
 	
 	ANDROID_SDK_ROOT=/opt/android-sdk
 	ANDROID_HOME=/opt/android-sdk

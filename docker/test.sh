@@ -13,7 +13,12 @@ BENCHMARK_DIR=/pedro/desenvolvimento/workspaces/workspace-benchmark/benchmark
 #docker run -it --rm --privileged -v $BENCHMARK_DIR/data/input:/opt/apps -v $BENCHMARK_DIR:/opt/benchmark -v $BENCHMARK_DIR/report:/opt/report -v $BENCHMARK_DIR/results:/opt/results phtcosta/android:1.0 bash
 
 #xhost +
-#docker run -it --rm --privileged --net=host --device /dev/snd --device /dev/dri -v $HOME/.Xauthority:$HOME/.Xauthority -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -v $BENCHMARK_DIR/data/input:/opt/apps -v $BENCHMARK_DIR:/opt/benchmark -v $BENCHMARK_DIR/report:/opt/report --name benchmark phtcosta/android:1.0 bash
+docker run -it --rm --privileged --net=host --device /dev/snd --device /dev/dri -v $HOME/.Xauthority:$HOME/.Xauthority -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=unix$DISPLAY -v $BENCHMARK_DIR:/opt/benchmark --name benchmark phtcosta/benchmark:1.0 bash
+#docker run -it --rm --privileged --net=host --device /dev/snd --device /dev/dri -v $HOME/.Xauthority:$HOME/.Xauthority -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY -v $BENCHMARK_DIR:/opt/benchmark --name benchmark phtcosta/benchmark:1.0 bash
+
+#--security-opt seccomp=default.json
+#If you add `--security-opt seccomp=unconfined`, it succeeds.
+
 #xhost -SI:localuser:root
 # -u root
 
