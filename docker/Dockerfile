@@ -57,8 +57,9 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools && \
 	unzip commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools && \
 	rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip
  
-ARG ANDROID_EMULATOR_PACKAGE_ARM="system-images;android-19;google_apis;armeabi-v7a"
-ARG ANDROID_PLATFORM_VERSION="platforms;android-19"
+ARG ANDROID_PLATFORM="android-25"
+ARG ANDROID_EMULATOR_PACKAGE_ARM="system-images;${ANDROID_PLATFORM};google_apis;armeabi-v7a"
+ARG ANDROID_PLATFORM_VERSION="platforms;${ANDROID_PLATFORM}"
 ARG ANDROID_SDK_PACKAGES="${ANDROID_EMULATOR_PACKAGE_ARM} ${ANDROID_PLATFORM_VERSION} platform-tools emulator"
 
 # sdkmanager

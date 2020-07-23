@@ -5,7 +5,7 @@ SCRIPT_DIR=~/script
 function base(){		
 	echo "******************** Installing base libraries ********************"
 	sudo apt-get update 
-	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python3 python3-setuptools python3-pip curl tree nano vim aapt apktool expect zipalign gnuplot
+	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python3 python3-setuptools python3-pip python3-dev python3-venv python3-wheel curl tree nano vim aapt apktool expect zipalign gnuplot
 #qt5-default tcl-expect
 	sudo apt-get upgrade --yes
 	sudo apt-get dist-upgrade --yes		

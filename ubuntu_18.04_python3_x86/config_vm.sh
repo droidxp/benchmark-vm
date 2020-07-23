@@ -5,10 +5,11 @@ SCRIPT_DIR=~/script
 function base(){		
 	echo "******************** Installing base libraries ********************"
 	sudo apt-get update 
-	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python3 python3-setuptools python3-pip python3-dev python3-venv python3-wheel curl tree nano vim aapt apktool expect zipalign gnuplot qemu-kvm libvirt-daemon-system bridge-utils virt-manager
-#qt5-default 
+	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python3 python3-setuptools python3-pip python3-dev python3-venv python3-wheel curl tree nano vim qt5-default aapt apktool expect zipalign gnuplot qemu-kvm libvirt-daemon-system bridge-utils virt-manager
 	sudo apt-get upgrade --yes
 	sudo apt-get dist-upgrade --yes		
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+	sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1	
 }
 
 function android() {
@@ -51,7 +52,7 @@ function android() {
 ############# BENCHMARK ############
 function pip(){
 	echo "******************** Installing PIP ********************"	
-	pip3 install pandas numpy matplotlib Jinja2 uiautomator	
+	pip3 install wheel pandas numpy matplotlib Jinja2 uiautomator	
 }
 
 
@@ -76,8 +77,8 @@ function droidbot(){
 function stoat(){
 	echo "******************** Installing Stoat ********************"
 	cd /opt 
-	sudo apt-get install -y --no-install-recommends ruby2.7 build-essential patch ruby-dev zlib1g-dev liblzma-dev 
-	gem install nokogiri 
+	sudo apt-get install -y --no-install-recommends ruby2.5 build-essential patch ruby-dev zlib1g-dev liblzma-dev 
+	sudo gem install nokogiri 	
 	git clone https://github.com/rbonifacio/Stoat.git
 	echo 'export STOAT_HOME=/opt/Stoat/Stoat' >> ~/.bashrc
 	echo 'export PATH=$PATH:$STOAT_HOME/bin' >> ~/.bashrc
@@ -102,14 +103,10 @@ function humanoid(){
 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	sudo apt-get update
-	sudo apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io
-	if [ $(getent group docker) ]; then
-		echo "group docker exists."
-	else
-	  	sudo groupadd -f docker 
-		sudo usermod -aG docker $USER 
-		newgrp docker 
-	fi
+	sudo apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io	
+  	sudo groupadd -f docker 
+	sudo usermod -aG docker $USER 
+	newgrp docker 	
 	sudo systemctl enable docker
 	docker pull phtcosta/humanoid:1.0
 }
