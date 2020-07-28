@@ -8,3 +8,5 @@ Scripts to configure benchmark
 * **ubuntu_20.04_python3_x86**: to configure a local computer (with GUI) with python3 and x86 AVD
 
 Execute `./config_vm.sh` inside directory (except docker)
+
+OBS:. copy scripts to ~/script folder and execute
