@@ -5,35 +5,36 @@ SCRIPT_DIR=~/script
 function base(){		
 	echo "******************** Installing base libraries ********************"
 	sudo apt-get update 
-	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python3 python3-setuptools python3-pip python3-dev python3-venv python3-wheel curl tree nano vim aapt apktool expect zipalign gnuplot qemu-kvm libvirt-daemon-system bridge-utils virt-manager
-#qt5-default 
+	sudo apt-get install -y --no-install-recommends openjdk-8-jdk git wget unzip nano python2.7 python2.7-dev python3 python3-setuptools python3-pip python3-dev python3-venv python3-wheel curl tree nano vim aapt apktool expect zipalign gnuplot qemu-kvm libvirt-daemon-system bridge-utils virt-manager qt5-default 
 	sudo apt-get upgrade --yes
 	sudo apt-get dist-upgrade --yes		
+	sudo chown -R $USER:$USER /opt 
+	sudo chmod -R a+rw /opt
 }
 
 function android() {
 	echo "******************** Install Android SDK ********************"
 	EMULATOR_NAME="Nexus-One-10"
+	ANDROID_VERSION=25
 	ANDROID_SDK_VERSION=6609375
-	ANDROID_EMULATOR_PACKAGE="system-images;android-19;google_apis;x86"
-	ANDROID_PLATFORM_VERSION="platforms;android-19"
-	ANDROID_SDK_PACKAGES="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platform-tools emulator" 
+	ANDROID_EMULATOR_PACKAGE="system-images;android-${ANDROID_VERSION};google_apis;x86_64"
+	ANDROID_PLATFORM_VERSION="platforms;android-${ANDROID_VERSION}"
+	ANDROID_SDK_PACKAGES_BASE="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platform-tools emulator " 
+	ANDROID_SDK_PACKAGES="${ANDROID_SDK_PACKAGES_BASE} \"build-tools;${ANDROID_VERSION}.0.3\" \"tools\" \"extras;android;m2repository\" \"extras;google;google_play_services\" \"extras;intel;Hardware_Accelerated_Execution_Manager\""	
 	# extras;intel;Hardware_Accelerated_Execution_Manager"
 	# Available Packages: https://gist.github.com/alvr/8db356880447d2c4bbe948ea92d22c23	
+	# List platforms: sdkmanager --list
 	
 	ANDROID_SDK_ROOT=/opt/android-sdk
 	ANDROID_HOME=/opt/android-sdk
-	JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-	
+	JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64	
 	export PATH=$JAVA_HOME/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}
-	
-	sudo chown -R $USER:$USER /opt 
-	sudo chmod -R a+rw /opt
+
 	
 	mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools
 	CMDLINE_FILE=commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip
-	wget -q https://dl.google.com/android/repository/${CMDLINE_FILE}
-	unzip ${CMDLINE_FILE} -d ${ANDROID_SDK_ROOT}/cmdline-tools 
+	wget https://dl.google.com/android/repository/${CMDLINE_FILE}
+	unzip -o ${CMDLINE_FILE} -d ${ANDROID_SDK_ROOT}/cmdline-tools 
 	rm ${CMDLINE_FILE}
 	
 	mkdir ~/.android/  
@@ -51,6 +52,13 @@ function android() {
 ############# BENCHMARK ############
 function pip(){
 	echo "******************** Installing PIP ********************"	
+	cd /opt 
+	# get pip2 (for python2)
+	curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+	python2.7 get-pip.py
+	# install libraries on python2
+	pip2 install pandas numpy matplotlib Jinja2 uiautomator	
+	# install libraries on python3
 	pip3 install pandas numpy matplotlib Jinja2 uiautomator	
 }
 
@@ -77,7 +85,7 @@ function stoat(){
 	echo "******************** Installing Stoat ********************"
 	cd /opt 
 	sudo apt-get install -y --no-install-recommends ruby2.7 build-essential patch ruby-dev zlib1g-dev liblzma-dev 
-	gem install nokogiri 
+	sudo gem install nokogiri 
 	git clone https://github.com/rbonifacio/Stoat.git
 	echo 'export STOAT_HOME=/opt/Stoat/Stoat' >> ~/.bashrc
 	echo 'export PATH=$PATH:$STOAT_HOME/bin' >> ~/.bashrc
@@ -87,10 +95,10 @@ function stoat(){
 function sapienz(){
 	echo "******************** Installing Sapienz ********************"
 	cd /opt 
-	sudo apt-get install -y --no-install-recommends libfreetype6-dev libxml2-dev libxslt1-dev python3-dev 
+	sudo apt-get install -y --no-install-recommends libfreetype6-dev libxml2-dev libxslt1-dev
 	git clone https://github.com/droidxp/sapienz.git 
 	cd sapienz 
-	pip3 install -r requirements.txt
+	pip2 install -r requirements.txt
 	echo 'export SAPIENZ_HOME=/opt/sapienz/' >> ~/.bashrc
 }
 
@@ -118,11 +126,12 @@ function environment(){
 	echo "******************** Configuring environment ********************"	
 	
 	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 2
 	sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1	
 	
-	mkdir ~/Android
-	cd ~/Android
-	ln -s /opt/android-sdk/ Sdk
+	#mkdir -p ~/Android
+	#cd ~/Android
+	#ln -s /opt/android-sdk/ Sdk
 	
 	echo 'export ANDROID_SDK_ROOT=/opt/android-sdk' >> ~/.bashrc
 	echo 'export ANDROID_SDK_HOME=/opt/android-sdk' >> ~/.bashrc
@@ -132,7 +141,7 @@ function environment(){
 	echo 'export PATH=${JAVA_HOME}/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}' >> ~/.bashrc	
 		
 	sudo usermod -aG kvm $USER
-	newgrp kvm 
+	#newgrp kvm 
 	
 	source ~/.bashrc
 
@@ -156,7 +165,7 @@ pip
 benchmark 
 droidbot 
 stoat 
-#sapienz # descomentar apenas apos migracao para python3
+sapienz
 humanoid 
 environment
 clean
