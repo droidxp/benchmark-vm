@@ -20,7 +20,8 @@ function android() {
 	ANDROID_EMULATOR_PACKAGE="system-images;android-${ANDROID_VERSION};google_apis;x86_64"
 	ANDROID_PLATFORM_VERSION="platforms;android-${ANDROID_VERSION}"
 	ANDROID_SDK_PACKAGES_BASE="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platform-tools emulator " 
-	ANDROID_SDK_PACKAGES="${ANDROID_SDK_PACKAGES_BASE} \"build-tools;${ANDROID_VERSION}.0.3\" \"tools\" \"extras;android;m2repository\" \"extras;google;google_play_services\" \"extras;intel;Hardware_Accelerated_Execution_Manager\""	
+	#ANDROID_SDK_PACKAGES="${ANDROID_SDK_PACKAGES_BASE} \"build-tools;${ANDROID_VERSION}.0.3\" \"tools\" \"extras;android;m2repository\" \"extras;google;google_play_services\" \"extras;intel;Hardware_Accelerated_Execution_Manager\""	
+	ANDROID_SDK_PACKAGES="${ANDROID_SDK_PACKAGES_BASE} build-tools;${ANDROID_VERSION}.0.3 tools extras;android;m2repository extras;google;google_play_services"
 	# extras;intel;Hardware_Accelerated_Execution_Manager"
 	# Available Packages: https://gist.github.com/alvr/8db356880447d2c4bbe948ea92d22c23	
 	# List platforms: sdkmanager --list
@@ -129,9 +130,9 @@ function environment(){
 	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 2
 	sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1	
 	
-	#mkdir -p ~/Android
-	#cd ~/Android
-	#ln -s /opt/android-sdk/ Sdk
+	mkdir -p ~/Android
+	cd ~/Android
+	ln -s /opt/android-sdk/ Sdk
 	
 	echo 'export ANDROID_SDK_ROOT=/opt/android-sdk' >> ~/.bashrc
 	echo 'export ANDROID_SDK_HOME=/opt/android-sdk' >> ~/.bashrc
