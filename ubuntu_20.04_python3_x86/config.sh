@@ -85,6 +85,7 @@ function droidbot(){
 function stoat(){
 	echo "******************** Installing Stoat ********************"
 	cd /opt 
+	sudo apt-get update
 	sudo apt-get install -y --no-install-recommends ruby2.7 build-essential patch ruby-dev zlib1g-dev liblzma-dev 
 	sudo gem install nokogiri 
 	git clone https://github.com/rbonifacio/Stoat.git
@@ -96,6 +97,8 @@ function stoat(){
 function sapienz(){
 	echo "******************** Installing Sapienz ********************"
 	cd /opt 
+	export PATH=${JAVA_HOME}/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}
+	sudo apt-get update 
 	sudo apt-get install -y --no-install-recommends libfreetype6-dev libxml2-dev libxslt1-dev
 	git clone https://github.com/droidxp/sapienz.git 
 	cd sapienz 
@@ -117,10 +120,10 @@ function humanoid(){
 	else
 	  	sudo groupadd -f docker 
 		sudo usermod -aG docker $USER 
-		newgrp docker 
+		#newgrp docker 
 	fi
 	sudo systemctl enable docker
-	docker pull phtcosta/humanoid:1.0
+	#docker pull phtcosta/humanoid:1.0
 }
 
 function environment(){
@@ -132,7 +135,7 @@ function environment(){
 	
 	mkdir -p ~/Android
 	cd ~/Android
-	ln -s /opt/android-sdk/ Sdk
+	ln -v -s /opt/android-sdk/ Sdk
 	
 	echo 'export ANDROID_SDK_ROOT=/opt/android-sdk' >> ~/.bashrc
 	echo 'export ANDROID_SDK_HOME=/opt/android-sdk' >> ~/.bashrc
@@ -146,7 +149,7 @@ function environment(){
 	
 	source ~/.bashrc
 
-	cd /opt/benchmark	
+	#cd /opt/benchmark	
 }
 
 # clean up
