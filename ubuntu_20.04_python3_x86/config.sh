@@ -19,8 +19,7 @@ function android() {
 	ANDROID_SDK_VERSION=6609375
 	ANDROID_EMULATOR_PACKAGE="system-images;android-${ANDROID_VERSION};google_apis;x86_64"
 	ANDROID_PLATFORM_VERSION="platforms;android-${ANDROID_VERSION}"
-	ANDROID_SDK_PACKAGES_BASE="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platform-tools emulator " 
-	#ANDROID_SDK_PACKAGES="${ANDROID_SDK_PACKAGES_BASE} \"build-tools;${ANDROID_VERSION}.0.3\" \"tools\" \"extras;android;m2repository\" \"extras;google;google_play_services\" \"extras;intel;Hardware_Accelerated_Execution_Manager\""	
+	ANDROID_SDK_PACKAGES_BASE="${ANDROID_EMULATOR_PACKAGE} ${ANDROID_PLATFORM_VERSION} platforms;android-19 platform-tools emulator " 
 	ANDROID_SDK_PACKAGES="${ANDROID_SDK_PACKAGES_BASE} build-tools;${ANDROID_VERSION}.0.3 tools extras;android;m2repository extras;google;google_play_services"
 	# extras;intel;Hardware_Accelerated_Execution_Manager"
 	# Available Packages: https://gist.github.com/alvr/8db356880447d2c4bbe948ea92d22c23	
@@ -97,7 +96,7 @@ function stoat(){
 function sapienz(){
 	echo "******************** Installing Sapienz ********************"
 	cd /opt 
-	export PATH=${JAVA_HOME}/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}
+	#export PATH=${JAVA_HOME}/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}
 	sudo apt-get update 
 	sudo apt-get install -y --no-install-recommends libfreetype6-dev libxml2-dev libxslt1-dev
 	git clone https://github.com/droidxp/sapienz.git 
@@ -115,13 +114,13 @@ function humanoid(){
 	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 	sudo apt-get update
 	sudo apt-get install -y --no-install-recommends docker-ce docker-ce-cli containerd.io
-	if [ $(getent group docker) ]; then
-		echo "group docker exists."
-	else
-	  	sudo groupadd -f docker 
-		sudo usermod -aG docker $USER 
+	#if [ $(getent group docker) ]; then
+	#	echo "group docker exists."
+	#else
+	sudo groupadd -f docker 
+	sudo usermod -aG docker $USER 
 		#newgrp docker 
-	fi
+	#fi
 	sudo systemctl enable docker
 	#docker pull phtcosta/humanoid:1.0
 }
