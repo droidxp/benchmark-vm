@@ -15,7 +15,7 @@ function base(){
 function android() {
 	echo "******************** Install Android SDK ********************"
 	EMULATOR_NAME="Nexus-One-10"
-	ANDROID_VERSION=25
+	ANDROID_VERSION=28
 	ANDROID_SDK_VERSION=6609375
 	ANDROID_EMULATOR_PACKAGE="system-images;android-${ANDROID_VERSION};google_apis;x86_64"
 	ANDROID_PLATFORM_VERSION="platforms;android-${ANDROID_VERSION}"

@@ -1,12 +1,9 @@
 # benchmark-vm
 
-Scripts to configure benchmark
+Scripts to configure benchmark to configure a local computer (with GUI) with python3 and x86 AVD
 
-* **docker**: docker image (not working yet)
-* **ubuntu_16.04_root**: deprecated (to be removed)
-* **ubuntu_20.04_gcp_python3**: to configure a VM (without GUI) with python3 and arm AVD
-* **ubuntu_20.04_python3_x86**: to configure a local computer (with GUI) with python3 and x86 AVD
+Execute `./config.sh` 
 
-Execute `./config_vm.sh` inside directory (except docker)
+OBS:. copy scripts to **~/script** folder and execute
 
-OBS:. copy scripts to ~/script folder and execute
+OBS:. start humanoid container if using this tool: `docker run -d --rm  -p 50405:50405 phtcosta/humanoid:1.0`
