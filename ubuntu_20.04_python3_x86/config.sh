@@ -57,9 +57,9 @@ function pip(){
 	curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
 	python2.7 get-pip.py
 	# install libraries on python2
-	pip2 install pandas numpy matplotlib Jinja2 uiautomator	
+	pip2 install pandas numpy matplotlib Jinja2 uiautomator	dominate
 	# install libraries on python3
-	pip3 install pandas numpy matplotlib Jinja2 uiautomator	
+	pip3 install pandas numpy matplotlib Jinja2 uiautomator	dominate
 }
 
 
@@ -98,7 +98,7 @@ function sapienz(){
 	cd /opt 
 	#export PATH=${JAVA_HOME}/bin:${ANDROID_SDK_ROOT}/emulator:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/platform-tools:${HOME}/.local/bin:${PATH}
 	sudo apt-get update 
-	sudo apt-get install -y --no-install-recommends libfreetype6-dev libxml2-dev libxslt1-dev
+	sudo apt-get install -y --no-install-recommends libfreetype6-dev libxml2-dev libxslt1-dev python-dev python-tk
 	git clone https://github.com/droidxp/sapienz.git 
 	cd sapienz 
 	pip2 install -r requirements.txt
